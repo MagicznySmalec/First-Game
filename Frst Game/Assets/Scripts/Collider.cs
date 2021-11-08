@@ -5,7 +5,8 @@ public class Collider : MonoBehaviour
 {
     [SerializeField] float reloadDelay = 1f;
     [SerializeField] float nextLvlDelay = 1f;
-    [SerializeField] AudioClip trumpet;
+    [SerializeField] ParticleSystem succesParticles;
+    [SerializeField] ParticleSystem defeatParticles;
     [SerializeField] AudioClip coin;
 
     Rigidbody rb;
@@ -31,7 +32,6 @@ public class Collider : MonoBehaviour
                     break;
             case "Collectible":
                     Debug.Log("Congrats !");
-                    CoinSound();
                     CoinGrabbed();
                     Invoke("NextLevelLoad", nextLvlDelay);
                     break;
@@ -45,17 +45,17 @@ public class Collider : MonoBehaviour
 
     void Death()
     {
+        defeatParticles.Play();
         GetComponent<Mover>().enabled = false;
     }
 
 
     void CoinGrabbed()
     {
+        succesParticles.Play();
+        auso.Stop();
+        auso.PlayOneShot(coin);
         GetComponent<Mover>().enabled = false;
-        if (!auso.isPlaying)
-        {
-            auso.PlayOneShot(trumpet);
-        }
     }
 
     void levelReload()
@@ -73,14 +73,6 @@ public class Collider : MonoBehaviour
             nextSceneIndex = 0;
         }
         SceneManager.LoadScene(nextSceneIndex);
-    }
-
-    void CoinSound()
-    {
-        if (!auso.isPlaying)
-        {
-            auso.PlayOneShot(coin);
-        }
     }
 }
 
