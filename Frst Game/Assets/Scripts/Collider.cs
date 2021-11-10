@@ -9,13 +9,21 @@ public class Collider : MonoBehaviour
     [SerializeField] ParticleSystem defeatParticles;
     [SerializeField] AudioClip coin;
 
+
     Rigidbody rb;
     AudioSource auso;
+
+    bool cheat = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         auso = GetComponent<AudioSource>();
+    }
+
+    void Update()
+    {
+        CollisionDisabler();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -30,6 +38,7 @@ public class Collider : MonoBehaviour
                     Death();
                     Invoke("levelReload", reloadDelay);
                     break;
+                
             case "Collectible":
                     Debug.Log("Congrats !");
                     CoinGrabbed();
@@ -40,6 +49,7 @@ public class Collider : MonoBehaviour
                     Death();
                     Invoke("levelReload", reloadDelay);
                     break;
+
         }
     }   
 
@@ -73,6 +83,17 @@ public class Collider : MonoBehaviour
             nextSceneIndex = 0;
         }
         SceneManager.LoadScene(nextSceneIndex);
+
+
     }
+
+        void CollisionDisabler()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            cheat = !cheat;
+        }
+    }
+
 }
 
